@@ -1,0 +1,170 @@
+/* SISTEM TEMA WARNA (CSS VARIABLES) */
+:root {
+    /* Tema Default (Mint & Gold) */
+    --color-1: #CBDED3;
+    --color-2: #6A8A7E; 
+    --color-3: #D2C49E;
+    --color-4: #2A4A3E; 
+    --color-5: #E2DFDA;
+    --text-on-primary: #ffffff; 
+}
+
+body.theme-ocean {
+    --color-1: #D0E8F2; --color-2: #79A3B1; --color-3: #A0C1B8; --color-4: #456268; --color-5: #F0F5F9;
+    --text-on-primary: #ffffff;
+}
+
+body.theme-sunset {
+    --color-1: #FDE8CD; --color-2: #F9A03F; --color-3: #F7D08A; --color-4: #D72638; --color-5: #FFF8F0;
+    --text-on-primary: #ffffff;
+}
+
+body.theme-monochrome {
+    --color-1: #E0E0E0; 
+    --color-2: #757575; 
+    --color-3: #D4D4D4; 
+    --color-4: #212121; 
+    --color-5: #F5F5F5;
+    --text-on-primary: #ffffff;
+}
+
+body.theme-pink {
+    --color-1: #FCE4EC; --color-2: #F48FB1; --color-3: #F06292; --color-4: #C2185B; --color-5: #FFF0F5;
+    --text-on-primary: #ffffff;
+}
+
+body.theme-sunrise {
+    /* Tema Sunrise (Kuning) */
+    --color-1: #FFF9C4; --color-2: #FFD54F; --color-3: #FFE082; --color-4: #FBC02D; --color-5: #FFFDE7;
+    --text-on-primary: #1F2937; /* Abu-abu gelap */
+    --text-on-secondary: #4B5563; 
+}
+
+body.theme-skyblue {
+    /* Tema Sky Blue (Biru Langit) */
+    --color-1: #E1F5FE; --color-2: #81D4FA; --color-3: #29B6F6; --color-4: #0288D1; --color-5: #F4FAFD;
+    --text-on-primary: #01579B; /* Biru gelap senada */
+    --text-on-secondary: #0277BD; 
+}
+
+
+/* ========================================= */
+/* ATURAN KONTRAS TEKS KHUSUS TEMA SUNRISE   */
+/* ========================================= */
+
+body.theme-sunrise header, 
+.dark body.theme-sunrise header,
+/* Menyederhanakan selector agar mencakup tombol dengan .from-palette-4 apapun arah gradasinya */
+body.theme-sunrise button.from-palette-4,
+.dark body.theme-sunrise button.from-palette-4,
+body.theme-sunrise button.from-palette-3,
+.dark body.theme-sunrise button.from-palette-3 {
+    color: var(--text-on-primary) !important;
+}
+
+body.theme-sunrise #userGreeting,
+.dark body.theme-sunrise #userGreeting {
+    color: var(--text-on-secondary) !important;
+    opacity: 1 !important;
+}
+
+body.theme-sunrise [data-i18n="total_balance"] {
+    color: var(--text-on-secondary) !important;
+}
+.dark body.theme-sunrise [data-i18n="total_balance"] {
+    color: #D1D5DB !important; 
+}
+
+body.theme-sunrise #totalBalance {
+    color: var(--text-on-primary) !important;
+}
+.dark body.theme-sunrise #totalBalance {
+    color: #ffffff !important; 
+}
+
+body.theme-sunrise #transactionList button.bg-red-500,
+.dark body.theme-sunrise #transactionList button.bg-red-500 {
+    color: #ffffff !important;
+}
+
+body.theme-sunrise #transactionList .w-10.h-10.rounded-full,
+.dark body.theme-sunrise #transactionList .w-10.h-10.rounded-full,
+body.theme-sunrise #paginationControls button.bg-palette-4,
+.dark body.theme-sunrise #paginationControls button.bg-palette-4 {
+    color: var(--text-on-primary) !important;
+}
+
+
+/* ========================================= */
+/* ATURAN KONTRAS TEKS KHUSUS TEMA SKYBLUE   */
+/* ========================================= */
+
+body.theme-skyblue header, 
+.dark body.theme-skyblue header,
+body.theme-skyblue button.from-palette-4,
+.dark body.theme-skyblue button.from-palette-4,
+body.theme-skyblue button.from-palette-3,
+.dark body.theme-skyblue button.from-palette-3 {
+    color: var(--text-on-primary) !important;
+}
+
+body.theme-skyblue #userGreeting,
+.dark body.theme-skyblue #userGreeting {
+    color: var(--text-on-secondary) !important;
+    opacity: 1 !important;
+}
+
+body.theme-skyblue #transactionList .w-10.h-10.rounded-full,
+.dark body.theme-skyblue #transactionList .w-10.h-10.rounded-full,
+body.theme-skyblue #paginationControls button.bg-palette-4,
+.dark body.theme-skyblue #paginationControls button.bg-palette-4 {
+    color: var(--text-on-primary) !important;
+}
+
+body.theme-skyblue #transactionList button.bg-red-500,
+.dark body.theme-skyblue #transactionList button.bg-red-500 {
+    color: #ffffff !important;
+}
+
+
+/* ========================================= */
+/* ATURAN KONTRAS TEMA PEKAT (MINT, OCEAN, PINK, SUNSET) */
+/* ========================================= */
+
+body:not([class*="theme-"]) button.from-palette-4,
+.dark body:not([class*="theme-"]) button.from-palette-4,
+body:not([class*="theme-"]) button.from-palette-3,
+.dark body:not([class*="theme-"]) button.from-palette-3,
+
+body.theme-ocean button.from-palette-4,
+.dark body.theme-ocean button.from-palette-4,
+body.theme-ocean button.from-palette-3,
+.dark body.theme-ocean button.from-palette-3,
+
+body.theme-pink button.from-palette-4,
+.dark body.theme-pink button.from-palette-4,
+body.theme-pink button.from-palette-3,
+.dark body.theme-pink button.from-palette-3,
+
+body.theme-sunset button.from-palette-4,
+.dark body.theme-sunset button.from-palette-4,
+body.theme-sunset button.from-palette-3,
+.dark body.theme-sunset button.from-palette-3 {
+    color: #ffffff !important;
+}
+
+
+/* ========================================= */
+/* UTILITIES & CUSTOM SCROLLBAR              */
+/* ========================================= */
+.custom-scrollbar::-webkit-scrollbar { width: 6px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: var(--color-5); border-radius: 10px; }
+.dark .custom-scrollbar::-webkit-scrollbar-track { background: #374151; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background-color: var(--color-2); border-radius: 10px; }
+.dark .custom-scrollbar::-webkit-scrollbar-thumb { background-color: var(--color-4); }
+
+html { scroll-behavior: smooth; }
+* { transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; }
+
+.dark input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.8; cursor: pointer; }
+.dark input[type="date"]::-webkit-calendar-picker-indicator:hover { opacity: 1; }

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="id" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Planner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['-apple-system', 'BlinkMacSystemFont', '"San Francisco"', '"Helvetica Neue"', 'Helvetica', 'Arial', 'sans-serif'], },
+                    colors: {
+                        palette: { 1: 'var(--color-1)', 2: 'var(--color-2)', 3: 'var(--color-3)', 4: 'var(--color-4)', 5: 'var(--color-5)', }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=account_balance_wallet,bookmark" />
+    <style> .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; } </style>
+</head>
+<body class="bg-palette-5 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-300 min-h-screen font-sans">
+
+    <!-- STICKY WRAPPER -->
+    <div class="sticky top-0 z-50 shadow-md w-full flex flex-col">
+        
+        <header class="bg-gradient-to-b from-palette-4 to-palette-2 text-white transition-all duration-500">
+            <div class="max-w-[1440px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <span class="material-symbols-outlined" style="font-size: 28px;">account_balance_wallet</span>
+                    <div class="flex flex-col">
+                        <span class="text-lg md:text-xl font-semibold leading-none drop-shadow-sm">Financial Planner</span>
+                        <span class="text-[10px] md:text-xs font-light mt-1 text-palette-5 opacity-90" id="userGreeting">by Khafidzelf</span>
+                    </div>
+                </div>
+                <button id="themeToggle" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 px-3 py-1.5 rounded-md text-xs md:text-sm font-medium transition flex items-center space-x-1 shadow-sm">
+                    <span id="themeToggleText">🌙 Dark Mode</span>
+                </button>
+            </div>
+        </header>
+
+        <div class="bg-gradient-to-b from-palette-1 to-palette-5 dark:from-gray-800 dark:to-gray-900 border-b-2 border-palette-3 py-1.5 md:py-2 transition-all duration-500">
+            <div class="max-w-[1440px] w-full mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+                <span class="text-xs md:text-sm font-semibold text-palette-4 dark:text-palette-1 tracking-wide" data-i18n="total_balance">TOTAL SALDO</span>
+                <span id="totalBalance" class="text-lg md:text-2xl font-bold text-palette-4 dark:text-white truncate drop-shadow-sm">0</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="max-w-[1440px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 grid grid-cols-1 lg:grid-cols-12 gap-6 relative">
+        
+        <!-- Left Column -->
+        <div class="lg:col-span-4 space-y-6">
+            
+            <div class="bg-white dark:bg-gray-800 p-5 md:p-6 rounded-xl shadow-sm border-t-4 border-palette-4 relative z-10 transition-all duration-300 hover:shadow-md">
+                <h3 class="text-xl font-semibold mb-4" data-i18n="add_transaction">Tambah Transaksi</h3>
+                <form id="transactionForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1" data-i18n="trans_type">Tipe Transaksi</label>
+                        <select id="typeInput" class="w-full border p-2 rounded-md dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-palette-2">
+                            <option value="outcome" data-i18n="outcome">Pengeluaran</option>
+                            <option value="income" data-i18n="income">Pemasukan</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1" data-i18n="date">Tanggal</label>
+                        <input type="date" id="dateInput" max="2999-12-31" class="w-full border p-2 rounded-md dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-palette-2">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1" data-i18n="item_name">Nama Item</label>
+                        <input type="text" id="nameInput" data-i18n-placeholder="item_ph" placeholder="Misal: Makan Siang" class="w-full border p-2 rounded-md dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-palette-2">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1" data-i18n="amount">Jumlah</label>
+                        <input type="number" id="amountInput" placeholder="0" class="w-full border p-2 rounded-md dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-palette-2">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1" data-i18n="category">Kategori</label>
+                        <select id="categoryInput" class="w-full border p-2 rounded-md dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-palette-2"></select>
+                    </div>
+                    
+                    <!-- TOMBOL DIPERBARUI: bg-gradient-to-t (bottom to top), from-palette-4, to-palette-2, teks putih -->
+                    <button type="submit" class="w-full bg-gradient-to-t from-palette-4 to-palette-2 hover:from-palette-2 hover:to-palette-4 text-white font-medium py-2 px-4 rounded-md transition-all duration-300 shadow-md hover:shadow-lg" data-i18n="btn_add_trans">
+                        + Tambah Transaksi
+                    </button>
+                </form>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 p-5 md:p-6 rounded-xl shadow-sm border-t-4 border-palette-3 relative z-10 transition-all duration-300 hover:shadow-md">
+                <h3 class="text-lg font-semibold mb-3" data-i18n="manage_category">Kelola Kategori</h3>
+                <form id="customCategoryForm" class="space-y-3">
+                    <select id="customTypeInput" class="w-full border p-2 rounded-md text-sm dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-palette-2">
+                        <option value="outcome" data-i18n="for_outcome">Untuk Pengeluaran</option>
+                        <option value="income" data-i18n="for_income">Untuk Pemasukan</option>
+                    </select>
+                    <div class="flex space-x-2">
+                        <input type="text" id="customCategoryName" data-i18n-placeholder="new_cat_ph" placeholder="Kategori baru" class="w-full border p-2 rounded-md text-sm dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-palette-2">
+                        
+                        <!-- TOMBOL DIPERBARUI: Sama persis dengan tombol utama -->
+                        <button type="submit" class="bg-gradient-to-t from-palette-4 to-palette-2 hover:from-palette-2 hover:to-palette-4 text-white font-medium px-4 py-2 rounded-md transition-all duration-300 shadow-sm hover:shadow-md" data-i18n="btn_add">Tambah</button>
+                    </div>
+                </form>
+                <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                    <p class="text-xs font-medium mb-2 text-gray-500 dark:text-gray-400" data-i18n="cat_current">Kategori saat ini (Klik 'x' untuk hapus):</p>
+                    <div id="categoryBadgeContainer" class="flex flex-wrap gap-2"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="lg:col-span-8 space-y-6">
+            
+            <div id="chartsSection" class="grid grid-cols-1 md:grid-cols-2 gap-6 transition-all duration-300">
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border-t-4 border-palette-3 flex flex-col items-center justify-center hover:shadow-md transition-shadow">
+                    <h3 class="text-lg md:text-xl font-semibold mb-4 w-full text-center" data-i18n="dist_outcome">Distribusi Pengeluaran</h3>
+                    <div class="w-full max-w-[200px] md:max-w-[250px]"><canvas id="expenseChart"></canvas></div>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border-t-4 border-palette-2 flex flex-col items-center justify-center hover:shadow-md transition-shadow">
+                    <h3 class="text-lg md:text-xl font-semibold mb-4 w-full text-center" data-i18n="dist_income">Distribusi Pemasukan</h3>
+                    <div class="w-full max-w-[200px] md:max-w-[250px]"><canvas id="incomeChart"></canvas></div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 p-5 md:p-6 rounded-xl shadow-sm border-t-4 border-palette-2 relative z-10 hover:shadow-md transition-shadow">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 space-y-3 sm:space-y-0">
+                    <h3 class="text-xl font-semibold" data-i18n="list_title">Daftar Transaksi</h3>
+                    <div class="flex flex-wrap items-center gap-2 sm:gap-4 w-full sm:w-auto">
+                        <div class="flex items-center space-x-2 w-1/2 sm:w-auto">
+                            <label class="text-xs sm:text-sm font-medium" data-i18n="show">Tampilkan:</label>
+                            <select id="limitInput" class="border p-1 rounded-md text-xs sm:text-sm dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-palette-2">
+                                <option value="5">5</option><option value="10" selected>10</option><option value="20">20</option><option value="40">40</option>
+                            </select>
+                        </div>
+                        <div class="flex items-center space-x-2 w-1/2 sm:w-auto">
+                            <label class="text-xs sm:text-sm font-medium" data-i18n="sort">Urutkan:</label>
+                            <select id="sortInput" class="border p-1 rounded-md text-xs sm:text-sm dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-palette-2 w-full sm:w-auto">
+                                <option value="newest" data-i18n="sort_new">Terbaru - Terlama</option>
+                                <option value="oldest" data-i18n="sort_old">Terlama - Terbaru</option>
+                                <option value="largest" data-i18n="sort_large">Terbesar - Terkecil</option>
+                                <option value="smallest" data-i18n="sort_small">Terkecil - Terbesar</option>
+                                <option value="az" data-i18n="sort_az">A - Z</option>
+                                <option value="za" data-i18n="sort_za">Z - A</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="overflow-y-auto max-h-[400px] pr-2 custom-scrollbar" id="transactionList"></div>
+                <div id="paginationControls" class="flex justify-center items-center mt-6 space-x-1 sm:space-x-2 hidden"></div>
+
+            </div>
+
+            <div id="notesSection" class="bg-white dark:bg-gray-800 p-5 md:p-6 rounded-xl shadow-sm border-t-4 border-palette-1 transition-all duration-300 relative z-10 hover:shadow-md">
+                <h3 class="text-xl font-semibold mb-4" data-i18n="notes_title">Catatan Harian</h3>
+                <div class="flex flex-col space-y-3">
+                    <div class="flex items-center space-x-3">
+                        <label class="text-sm font-medium" data-i18n="pick_date">Pilih Tanggal:</label>
+                        <input type="date" id="noteDateInput" max="2999-12-31" class="border p-2 rounded-md dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-palette-2">
+                    </div>
+                    <textarea id="noteTextArea" rows="4" data-i18n-placeholder="note_ph" placeholder="Tulis catatan, jurnal keuangan, atau pengingat..." class="w-full border p-3 rounded-md dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-palette-2 custom-scrollbar"></textarea>
+                    <div class="flex justify-end">
+                        
+                        <!-- TOMBOL DIPERBARUI: Sama persis dengan tombol utama -->
+                        <button id="saveNoteBtn" class="bg-gradient-to-t from-palette-4 to-palette-2 hover:from-palette-2 hover:to-palette-4 text-white font-medium py-2 px-6 rounded-md transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center space-x-1.5">
+                            <span class="material-symbols-outlined" style="font-size: 1.25em;">bookmark</span>
+                            <span id="saveNoteText" data-i18n="btn_save_note">Simpan Catatan</span>
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- SETTINGS & CUSTOMIZATION -->
+            <div class="bg-white dark:bg-gray-800 p-5 md:p-6 rounded-xl shadow-sm border-t-4 border-gray-400 relative z-10 hover:shadow-md transition-shadow">
+                <h3 class="text-xl font-semibold mb-4 border-b pb-2 dark:border-gray-700" data-i18n="settings_title">⚙️ Pengaturan & Kustomisasi</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2" data-i18n="user_name">Nama Panggilan Profil:</label>
+                            <input type="text" id="userNameInput" placeholder="Khafidzelf" class="w-full border p-2 rounded-md text-sm dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-palette-2">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2" data-i18n="language">Bahasa / Language:</label>
+                            <select id="languageInput" class="border p-2 rounded-md text-sm dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-palette-2">
+                                <option value="id">🇮🇩 Bahasa Indonesia</option><option value="en">🇬🇧 English</option>
+                                <option value="ko">🇰🇷 한국어 (Korean)</option><option value="ja">🇯🇵 日本語 (Japanese)</option>
+                                <option value="es">🇪🇸 Español (Spanish)</option><option value="nl">🇳🇱 Nederlands (Dutch)</option>
+                                <option value="de">🇩🇪 Deutsch (German)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2" data-i18n="theme_color">Tema Warna Aplikasi:</label>
+                            <div class="flex flex-wrap gap-2 md:gap-3">
+                                <button onclick="changeTheme('default')" class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-gradient-to-b from-[#3B6255] to-[#8BA49A] border-2 border-transparent hover:border-gray-400 focus:ring-2 focus:ring-[#3B6255] shadow-sm" title="Mint (Default)"></button>
+                                <button onclick="changeTheme('ocean')" class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-gradient-to-b from-[#456268] to-[#79A3B1] border-2 border-transparent hover:border-gray-400 focus:ring-2 focus:ring-[#456268] shadow-sm" title="Ocean Blue"></button>
+                                <button onclick="changeTheme('sunset')" class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-gradient-to-b from-[#D72638] to-[#F9A03F] border-2 border-transparent hover:border-gray-400 focus:ring-2 focus:ring-[#D72638] shadow-sm" title="Sunset Orange"></button>
+                                <button onclick="changeTheme('monochrome')" class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-gradient-to-b from-[#212121] to-[#9E9E9E] border-2 border-transparent hover:border-gray-400 focus:ring-2 focus:ring-[#212121] shadow-sm" title="Monochrome"></button>
+                                <button onclick="changeTheme('pink')" class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-gradient-to-b from-[#C2185B] to-[#F48FB1] border-2 border-transparent hover:border-gray-400 focus:ring-2 focus:ring-[#C2185B] shadow-sm" title="Pink Blossom"></button>
+                                <button onclick="changeTheme('sunrise')" class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-gradient-to-b from-[#F57F17] to-[#FFD54F] border-2 border-transparent hover:border-gray-400 focus:ring-2 focus:ring-[#F57F17] shadow-sm" title="Sunrise Yellow"></button>
+                                <button onclick="changeTheme('skyblue')" class="w-7 h-7 md:w-8 md:h-8 rounded-full bg-gradient-to-b from-[#0277BD] to-[#81D4FA] border-2 border-transparent hover:border-gray-400 focus:ring-2 focus:ring-[#0277BD] shadow-sm" title="Sky Blue"></button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2" data-i18n="currency">Mata Uang:</label>
+                            <select id="currencyInput" class="border p-2 rounded-md text-sm dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-palette-2">
+                                <option value="IDR">Rupiah (Rp)</option><option value="USD">US Dollar ($)</option>
+                                <option value="EUR">Euro (€)</option><option value="GBP">Poundsterling (£)</option>
+                                <option value="AUD">Aussie Dollar (A$)</option><option value="JPY">Japanese Yen (¥)</option>
+                                <option value="KRW">Korean Won (₩)</option><option value="CNY">Chinese Yuan (CN¥)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2" data-i18n="focus_mode">Mode Fokus (Sembunyikan):</label>
+                            <div class="flex space-x-4 text-sm">
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="checkbox" id="hideChartToggle" class="rounded text-palette-4 focus:ring-palette-4">
+                                    <span data-i18n="chart">Grafik</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="checkbox" id="hideNoteToggle" class="rounded text-palette-4 focus:ring-palette-4">
+                                    <span data-i18n="notes">Catatan</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <label class="block text-sm font-medium mb-2" data-i18n="data_mgmt">Manajemen Data:</label>
+                        <div class="flex flex-col space-y-3">
+                            <button onclick="exportData()" class="w-full bg-gradient-to-b from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-medium py-2 rounded-md transition-all duration-300 text-sm flex justify-center items-center shadow-md hover:shadow-lg" data-i18n="btn_backup">📥 Backup Data (Download JSON)</button>
+                            <button onclick="document.getElementById('importFile').click()" class="w-full bg-gradient-to-b from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white font-medium py-2 rounded-md transition-all duration-300 text-sm flex justify-center items-center shadow-md hover:shadow-lg" data-i18n="btn_restore">📤 Restore Data (Upload JSON)</button>
+                            <input type="file" id="importFile" accept=".json" class="hidden" onchange="importData(event)">
+                            <button onclick="resetData()" class="w-full bg-gradient-to-b from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white font-medium py-2 rounded-md transition-all duration-300 text-sm flex justify-center items-center shadow-md hover:shadow-lg" data-i18n="btn_reset">⚠️ Reset / Hapus Semua Data</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
